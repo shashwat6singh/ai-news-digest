@@ -1,0 +1,35 @@
+name: AI Policy Daily Digest
+
+on:
+  schedule:
+    # 1:30 AM UTC = 7:00 AM IST (India Standard Time, UTC+5:30)
+    # After Aug 20, change to 12:00 PM UTC = 7:30 AM EST (Boston, UTC-5 in winter)
+    - cron: "30 1 * * *"
+
+  # Also allow manual trigger from GitHub UI (useful for testing)
+  workflow_dispatch:
+
+jobs:
+  send-digest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run digest and send email
+        env:
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+          GITHUB_USERNAME: ${{ secrets.GITHUB_USERNAME }}
+        run: python src/main.py
