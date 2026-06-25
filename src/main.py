@@ -6,7 +6,7 @@ Environment variables required (set as GitHub Secrets):
   SENDER_EMAIL      — Gmail address you send FROM
   SENDER_PASSWORD   — Gmail App Password (NOT your account password)
   RECIPIENT_EMAIL   — Email address to deliver to (can be same as sender)
-  GITHUB_USERNAME   — Your GitHub username (for footer link)
+  MY_GIT_USERNAME   — Your GitHub username (for footer link)
 """
 
 import os
@@ -58,7 +58,7 @@ def main():
     for i, s in enumerate(stories, 1):
         print(f"  {i}. [{s.score:.2f}] {s.source} — {s.title[:70]}...")
 
-    github_user = os.environ.get("GITHUB_USERNAME", "your-username")
+    github_user = os.environ.get("MY_GIT_USERNAME", "your-username")
     subject, html_body = build_email(stories, github_user=github_user)
 
     print("\nSending email...")
